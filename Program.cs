@@ -2,19 +2,19 @@ using cush.Config;
 using cush.Data;
 using cush.Service;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApiDbContext>(opt =>
-//     opt.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase")));
-
+// builder.Services.AddDbContext<ApiDbContext>(opt =>
+//     opt.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"))
+//         .UseSnakeCaseNamingConvention());
 builder.Services.AddDbContext<ApiDbContext>(opt =>
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"))
-        .UseSnakeCaseNamingConvention());
+    opt.UseNpgsql(System.Environment.GetEnvironmentVariable("WebApiDatabase"))
+        .UseSnakeCaseNamingConvention());      
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddScoped<CushService>();
