@@ -24,10 +24,10 @@
 
 > /api/Cush/range GET 方法
 
-| Parameters ｜ type ｜ example |
-| ----------------------------- | ------ | ------------ |
-| StartDateStr                  | string | "2000-01-06" |
-| endDateStr                    | string | "2000-01-06" |
+| Parameters   | type   | example      |
+| ------------ | ------ | ------------ |
+| StartDateStr | string | "2000-01-06" |
+| endDateStr   | string | "2000-01-06" |
 
 返回参数
 
