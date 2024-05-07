@@ -37,7 +37,7 @@ public class CushController: ControllerBase
     [HttpGet("range")]
     public async Task<ActionResult<List<CushDTO>>> GetTransactionsInTimeRange(string StartDateStr, string endDateStr)
     {
-        _logger.LogInformation("GetTransactionsInTimeRange", StartDateStr, endDateStr);
+        _logger.LogInformation("Getting transactions in time range: {StartDateStr} - {endDateStr}", StartDateStr, endDateStr);
         var start = DateTime.ParseExact(StartDateStr, "yyyy-MM-dd", null);
         var end = DateTime.ParseExact(endDateStr + " 23:59:59", "yyyy-MM-dd HH:mm:ss", null);
         TimeZoneInfo chinaStandardTime = TimeZoneInfo.FindSystemTimeZoneById("Asia/Shanghai");
