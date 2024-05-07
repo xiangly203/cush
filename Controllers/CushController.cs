@@ -14,11 +14,13 @@ public class CushController: ControllerBase
 {
     private readonly CushService _cushService;
     private readonly IMapper _mapper;
+    private readonly ILogger _logger;
 
-    public CushController(CushService cushService, IMapper mapper)
+    public CushController(CushService cushService, IMapper mapper, ILogger<CushController> logger)
     {
         _cushService = cushService;
         _mapper = mapper;
+        _logger = logger;
     }
 
     [HttpPost]
@@ -35,6 +37,7 @@ public class CushController: ControllerBase
     [HttpGet("range")]
     public async Task<ActionResult<List<CushDTO>>> GetTransactionsInTimeRange(string StartDateStr, string endDateStr)
     {
+        _logger.LogInformation("GetTransactionsInTimeRange", StartDateStr, endDateStr);
         var start = DateTime.ParseExact(StartDateStr, "yyyy-MM-dd", null);
         var end = DateTime.ParseExact(endDateStr + " 23:59:59", "yyyy-MM-dd HH:mm:ss", null);
         TimeZoneInfo chinaStandardTime = TimeZoneInfo.FindSystemTimeZoneById("Asia/Shanghai");
