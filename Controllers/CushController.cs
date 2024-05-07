@@ -33,11 +33,16 @@ public class CushController: ControllerBase
     }
 
     [HttpGet("range")]
-    public async Task<ActionResult<List<CushDTO>>> GetTransactionsInTimeRange(DateTime startDate, DateTime endDate)
+    public async Task<ActionResult<List<CushDTO>>> GetTransactionsInTimeRange(string StartDateStr, string endDateStr)
     {
+        var start = DateTime.ParseExact(StartDateStr, "yyyy-MM-dd", null);
+        var end = DateTime.ParseExact(endDateStr + " 23:59:59", "yyyy-MM-dd HH:mm:ss", null);
+        TimeZoneInfo chinaStandardTime = TimeZoneInfo.FindSystemTimeZoneById("Asia/Shanghai");
+        DateTime startDateTimeUtc = TimeZoneInfo.ConvertTimeToUtc(start,chinaStandardTime);
+        DateTime endDateTimeUtc = TimeZoneInfo.ConvertTimeToUtc(end,chinaStandardTime);
         try
         {
-            var cushes = await _cushService.GetCushesInTimeRange(startDate, endDate);
+            var cushes = await _cushService.GetCushesInTimeRange(startDateTimeUtc, endDateTimeUtc);
             return Ok(cushes);
         }
         catch (Exception e)
