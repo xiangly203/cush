@@ -39,7 +39,7 @@ namespace cush.Service
                 return false;
             }
         }
-        public async Task<List<ResDto>> GetCushesInTimeRange(DateTime startDate, DateTime endDate)
+        public async Task<ResDto> GetCushesInTimeRange(DateTime startDate, DateTime endDate)
         {
             var transactions = await _context.Cushes
                 .Where(t => t.CreatedAt >= startDate && t.CreatedAt <= endDate)
@@ -49,16 +49,12 @@ namespace cush.Service
             var totalIncome = transactions.Where(t => t.Type == 1).Sum(t => t.Amount);
             var totalOutcome = transactions.Where(t => t.Type == 0).Sum(t => t.Amount);
             var totalsAmount = totalIncome - totalOutcome;
-            var result = new List<ResDto>
-            {
-                new ResDto
-                {
+            var result = new ResDto{
                     Total = totalTransactions,
                     Income = totalIncome,
                     Outcome = totalOutcome,
                     Amount = totalsAmount
-                }
-            };
+                };
             return result;
         }
     }

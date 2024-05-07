@@ -14,9 +14,10 @@ builder.Services.AddDbContext<ApiDbContext>(opt =>
         .UseSnakeCaseNamingConvention());      
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddScoped<CushService>();
-builder.Services.AddSingleton<IConnectionMultiplexer>(opt =>
-    ConnectionMultiplexer.Connect(System.Environment.GetEnvironmentVariable("RedisConnection")));
-    
+builder.Services.AddSingleton<IDatabase> (
+    redis => ConnectionMultiplexer.Connect(System.Environment.GetEnvironmentVariable("RedisConnection"))
+        .GetDatabase());
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.WebHost.ConfigureKestrel(serverOptions =>
@@ -36,14 +37,15 @@ else
     app.UseDeveloperExceptionPage();
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApiDbContext>();
-    context.Database.EnsureCreated();
-    context.Database.Migrate();
+// using (var scope = app.Services.CreateScope())
+// {
+//     var services = scope.ServiceProvider;
+//     var context = services.GetRequiredService<ApiDbContext>();
+//     context.Database.EnsureCreated();
+//     context.Database.Migrate();
 
-}
+// }
+
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
