@@ -8,10 +8,12 @@ namespace cush.Service
     public class CushService
     {
         private readonly ApiDbContext _context;
+        private readonly ILogger _logger;
 
-        public CushService(ApiDbContext context)
+        public CushService(ApiDbContext context, ILogger<CushService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<bool> CreateCushesAsync(CushDTO cushDto)
@@ -33,6 +35,7 @@ namespace cush.Service
             }
             catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return false;
             }
         }

@@ -2,23 +2,23 @@ using cush.Config;
 using cush.Data;
 using cush.Service;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// builder.Services.AddDbContext<ApiDbContext>(opt =>
-//     opt.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"))
-//         .UseSnakeCaseNamingConvention());
 builder.Services.AddDbContext<ApiDbContext>(opt =>
     opt.UseNpgsql(System.Environment.GetEnvironmentVariable("WebApiDatabase"))
         .UseSnakeCaseNamingConvention());      
-
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddScoped<CushService>();
-
+builder.Services.AddSingleton<IConnectionMultiplexer>(opt =>
+    ConnectionMultiplexer.Connect(System.Environment.GetEnvironmentVariable("RedisConnection")));
+    
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.ListenAnyIP(5296);
