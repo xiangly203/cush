@@ -19,6 +19,9 @@ namespace cush.Models
 
         [Required]
         public int Kind { get; set; }
+        
+        [Required]
+        public int currency { get; set; }
 
         [Required]
         [Column(TypeName = "TIMESTAMP WITH TIME ZONE")]
